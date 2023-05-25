@@ -30,6 +30,7 @@ import {
   Counter,
   FloristFriar,
   get,
+  getKramcoWandererChance,
   have,
   Macro,
   SourceTerminal,
@@ -113,6 +114,23 @@ export function BaggoQuest(): Quest {
           runChoice(5);
         },
         limit: { tries: 5 },
+      },
+      {
+        name: "Fight Guaranteed Kramcos",
+        ready: () =>
+          getKramcoWandererChance() === 1 &&
+          myAdventures() > 0 &&
+          have($item`Kramco Sausage-o-Matic™`),
+        completed: () => getKramcoWandererChance() < 1,
+        do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
+        outfit: () => {
+          return {
+            ...baggoOutfit(false).spec(),
+            ...freeFightFamiliarSpec(),
+            offhand: $item`Kramco Sausage-o-Matic™`,
+          };
+        },
+        combat: new CombatStrategy().kill(),
       },
       {
         name: "Potions",

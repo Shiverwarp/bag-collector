@@ -1,5 +1,3 @@
-import { args } from "./args";
-import { SimulatedState } from "./simulated-state";
 import { Outfit } from "grimoire-kolmafia";
 import {
   canInteract,
@@ -16,6 +14,8 @@ import {
   toInt,
 } from "kolmafia";
 import { $familiar, $path, get, withProperty } from "libram";
+import { args } from "./args";
+import { SimulatedState } from "./simulated-state";
 
 export function debug(message: string, color?: string): void {
   if (color) {
