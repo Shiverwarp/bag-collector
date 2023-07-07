@@ -32,6 +32,7 @@ import {
   get,
   getKramcoWandererChance,
   have,
+  JuneCleaver,
   Macro,
   SourceTerminal,
 } from "libram";
@@ -41,7 +42,14 @@ import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
 import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
 import { meatFamiliarSpec } from "../familiar/meat-familiar";
-import { gyou, isSober, turnsRemaining } from "../lib";
+import {
+  bestJuneCleaverOption,
+  gyou,
+  isSober,
+  juneCleaverSkipChoices,
+  setJuneCleaverSkipChoices,
+  turnsRemaining,
+} from "../lib";
 import { olfactMonster } from "../main";
 import { baggoOutfit } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
@@ -187,6 +195,25 @@ export function BaggoQuest(): Quest {
         outfit: baggoOutfit,
         combat: new CombatStrategy().kill(),
         effects,
+      },
+      {
+        name: "June Cleave",
+        completed: () => get("_juneCleaverFightsLeft") > 0,
+        ready: () => have($item`June cleaver`),
+        prepare: setJuneCleaverSkipChoices,
+        do: $location`Noob Cave`,
+        outfit: { weapon: $item`June cleaver` },
+        combat: new CombatStrategy().macro(Macro.abort()),
+        choices: JuneCleaver.choices.reduce(
+          (obj, id) => ({
+            ...obj,
+            [id]:
+              JuneCleaver.skipsRemaining() > 0 && juneCleaverSkipChoices?.includes(id)
+                ? 4
+                : bestJuneCleaverOption(id),
+          }),
+          {}
+        ),
       },
       {
         name: "Party Fair",
