@@ -4,7 +4,7 @@ import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
 import { Task } from "./task";
-import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
+import { CombatResources, CombatStrategy, Engine, Outfit } from "grimoire-kolmafia";
 import { haveEffect, haveEquipped, Item, mallPrice, myAdventures, toInt } from "kolmafia";
 import {
   $effect,
@@ -24,25 +24,25 @@ const RUN_SOURCES = [
   { item: $item`GOTO`, successRate: 0.3 },
 ];
 
-export class Engine extends BaseEngine<CombatActions, Task> {
+export class BaggoEngine extends Engine<CombatActions, Task> {
   static runSource: FreeRun | null = null;
 
   static runMacro(): Macro {
-    if (!Engine.runSource)
+    if (!BaggoEngine.runSource)
       return Macro.externalIf(
         $items`navel ring of navel gazing, Greatest American Pants`.some((i) => haveEquipped(i)),
         Macro.runaway()
       );
     return Macro.while_(
-      `hascombatitem ${toInt(Engine.runSource.item)}`,
-      Macro.item(Engine.runSource.item)
+      `hascombatitem ${toInt(BaggoEngine.runSource.item)}`,
+      Macro.item(BaggoEngine.runSource.item)
     );
   }
 
   constructor(tasks: Task[]) {
     super(tasks, { combat_defaults: new MyActionDefaults() });
     if (args.freerun) {
-      Engine.runSource =
+      BaggoEngine.runSource =
         RUN_SOURCES.map(({ item, successRate }) => ({
           item,
           successRate,
@@ -62,11 +62,11 @@ export class Engine extends BaseEngine<CombatActions, Task> {
         : task.acquire
       : [];
 
-    if (Engine.runSource) {
+    if (BaggoEngine.runSource) {
       items.push({
-        ...Engine.runSource,
+        ...BaggoEngine.runSource,
         num: Math.ceil(
-          Math.log(1 / (1 - 0.999)) / Math.log(1 / (1 - Engine.runSource.successRate))
+          Math.log(1 / (1 - 0.999)) / Math.log(1 / (1 - BaggoEngine.runSource.successRate))
         ), // Enough to guarantee success >= 99.9% of the time
       });
     }
@@ -104,7 +104,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     const alreadyBanished = [...getBanishedMonsters().values()];
     for (const monster of alreadyBanished) {
       const strategy = combat.currentStrategy(monster);
-      if (strategy === "banish") combat.macro(Engine.runMacro(), monster);
+      if (strategy === "banish") combat.macro(BaggoEngine.runMacro(), monster);
     }
   }
 
