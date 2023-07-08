@@ -3,7 +3,7 @@ import { SimulatedState } from "../simulated-state";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
-import { Task } from "./task";
+import { BaggoTask } from "./task";
 import { CombatResources, CombatStrategy, Engine, Outfit } from "grimoire-kolmafia";
 import { haveEffect, haveEquipped, Item, mallPrice, myAdventures, toInt } from "kolmafia";
 import {
@@ -24,7 +24,7 @@ const RUN_SOURCES = [
   { item: $item`GOTO`, successRate: 0.3 },
 ];
 
-export class BaggoEngine extends Engine<CombatActions, Task> {
+export class BaggoEngine extends Engine<CombatActions, BaggoTask> {
   static runSource: FreeRun | null = null;
 
   static runMacro(): Macro {
@@ -39,7 +39,7 @@ export class BaggoEngine extends Engine<CombatActions, Task> {
     );
   }
 
-  constructor(tasks: Task[]) {
+  constructor(tasks: BaggoTask[]) {
     super(tasks, { combat_defaults: new MyActionDefaults() });
     if (args.freerun) {
       BaggoEngine.runSource =
@@ -55,7 +55,7 @@ export class BaggoEngine extends Engine<CombatActions, Task> {
     }
   }
 
-  acquireItems(task: Task): void {
+  acquireItems(task: BaggoTask): void {
     const items = task.acquire
       ? typeof task.acquire === "function"
         ? task.acquire()
@@ -73,7 +73,7 @@ export class BaggoEngine extends Engine<CombatActions, Task> {
     super.acquireItems({ ...task, acquire: items });
   }
 
-  execute(task: Task): void {
+  execute(task: BaggoTask): void {
     const beaten_turns = haveEffect($effect`Beaten Up`);
     const start_advs = myAdventures();
     super.execute(task);
@@ -92,7 +92,7 @@ export class BaggoEngine extends Engine<CombatActions, Task> {
   }
 
   customize(
-    task: Task,
+    task: BaggoTask,
     outfit: Outfit,
     combat: CombatStrategy<CombatActions>,
     resources: CombatResources<CombatActions>
