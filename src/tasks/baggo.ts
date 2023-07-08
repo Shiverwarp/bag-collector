@@ -1,13 +1,16 @@
 import {
   abort,
+  adv1,
   canAdventure,
   canInteract,
   expectedColdMedicineCabinet,
   getWorkshed,
+  inebrietyLimit,
   itemAmount,
   Location,
   myAdventures,
   myClass,
+  myInebriety,
   myLocation,
   myThrall,
   putCloset,
@@ -35,6 +38,7 @@ import {
   JuneCleaver,
   Macro,
   SourceTerminal,
+  withProperty,
 } from "libram";
 import { args } from "../args";
 import { CombatStrategy } from "../engine/combat";
@@ -42,17 +46,11 @@ import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
 import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
 import { meatFamiliarSpec } from "../familiar/meat-familiar";
-import {
-  bestJuneCleaverOption,
-  gyou,
-  isSober,
-  juneCleaverSkipChoices,
-  setJuneCleaverSkipChoices,
-  turnsRemaining,
-} from "../lib";
+import { gyou, isSober, turnsRemaining } from "../lib";
 import { olfactMonster } from "../main";
 import { baggoOutfit } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
+import { juneCleaverChoices } from "../cleaver";
 
 const FLORIST_FLOWERS = [
   FloristFriar.StealingMagnolia,
@@ -150,6 +148,19 @@ export function BaggoQuest(): Quest {
         outfit: baggoOutfit,
       },
       {
+        name: "June Cleaver",
+        completed: () => !JuneCleaver.have() || !!get("_juneCleaverFightsLeft"),
+        do: () =>
+          withProperty("recoveryScript", "", () => {
+            const target =
+              myInebriety() > inebrietyLimit() ? $location`Drunken Stupor` : $location`Noob Cave`;
+            adv1(target, -1, "");
+          }),
+        choices: juneCleaverChoices,
+        outfit: { weapon: $item`June cleaver` },
+        combat: new CombatStrategy().macro(Macro.abort()),
+      },
+      {
         name: "Proton Ghost",
         ready: () =>
           have($item`protonic accelerator pack`) &&
@@ -195,25 +206,6 @@ export function BaggoQuest(): Quest {
         outfit: baggoOutfit,
         combat: new CombatStrategy().kill(),
         effects,
-      },
-      {
-        name: "June Cleave",
-        completed: () => get("_juneCleaverFightsLeft") > 0,
-        ready: () => have($item`June cleaver`),
-        prepare: setJuneCleaverSkipChoices,
-        do: $location`Noob Cave`,
-        outfit: { weapon: $item`June cleaver` },
-        combat: new CombatStrategy().macro(Macro.abort()),
-        choices: JuneCleaver.choices.reduce(
-          (obj, id) => ({
-            ...obj,
-            [id]:
-              JuneCleaver.skipsRemaining() > 0 && juneCleaverSkipChoices?.includes(id)
-                ? 4
-                : bestJuneCleaverOption(id),
-          }),
-          {}
-        ),
       },
       {
         name: "Party Fair",
