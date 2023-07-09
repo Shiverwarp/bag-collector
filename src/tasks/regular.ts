@@ -1,9 +1,12 @@
 import {
   abort,
+  adv1,
   canAdventure,
   expectedColdMedicineCabinet,
   getWorkshed,
+  inebrietyLimit,
   Location,
+  myInebriety,
   runChoice,
   totalTurnsPlayed,
   visitUrl,
@@ -18,8 +21,10 @@ import {
   get,
   getKramcoWandererChance,
   have,
+  JuneCleaver,
   Macro,
   SourceTerminal,
+  withProperty,
 } from "libram";
 import { args } from "../args";
 import { BaggoCombatStrategy } from "../engine/combat";
@@ -30,6 +35,7 @@ import { isSober } from "../lib";
 import { baggoOutfit } from "../outfit";
 import { EFFECTS } from "../effects";
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
+import { juneCleaverChoices } from "../cleaver";
 
 export const REGULAR_TASKS: BaggoTask[] = [
   {
@@ -43,6 +49,19 @@ export const REGULAR_TASKS: BaggoTask[] = [
     },
     combat: new BaggoCombatStrategy().kill(),
     effects: EFFECTS,
+  },
+  {
+    name: "June Cleaver",
+    completed: () => !JuneCleaver.have() || !!get("_juneCleaverFightsLeft"),
+    do: () =>
+      withProperty("recoveryScript", "", () => {
+        const target =
+          myInebriety() > inebrietyLimit() ? $location`Drunken Stupor` : $location`Noob Cave`;
+        adv1(target, -1, "");
+      }),
+    choices: juneCleaverChoices,
+    outfit: { weapon: $item`June cleaver` },
+    combat: new BaggoCombatStrategy().macro(Macro.abort()),
   },
   {
     name: "Proton Ghost",
