@@ -35,7 +35,7 @@ import { isSober } from "../lib";
 import { baggoOutfit } from "../outfit";
 import { EFFECTS } from "../effects";
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
-import { juneCleaverChoices } from "../cleaver";
+import { juneCleaverChoices } from "../resources/cleaver";
 
 export const REGULAR_TASKS: BaggoTask[] = [
   {
