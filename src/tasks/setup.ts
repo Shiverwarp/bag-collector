@@ -55,6 +55,8 @@ const FLORIST_FLOWERS = [
   FloristFriar.PitcherPlant,
 ];
 
+let checkedGnomePart = false;
+
 function pull(item: Item): BaggoTask {
   return {
     name: `Pull ${item}`,
@@ -123,9 +125,12 @@ export const SETUP_TASKS: BaggoTask[] = [
   },
   {
     name: "Kgnee",
-    ready: () => have($familiar`Reagnimated Gnome`),
+    ready: () => have($familiar`Reagnimated Gnome`) && !checkedGnomePart,
     completed: () => have($item`gnomish housemaid's kgnee`),
     do: () => ReagnimatedGnome.choosePart("kgnee"),
+    post: (): void => {
+      checkedGnomePart = true;
+    },
     outfit: { familiar: $familiar`Reagnimated Gnome` },
     limit: { tries: 1 },
   },
