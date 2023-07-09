@@ -5,8 +5,13 @@ import {
   cliExecute,
   getClanLounge,
   Item,
+  itemAmount,
   mallPrice,
+  myClass,
+  myLocation,
   mySign,
+  myThrall,
+  putCloset,
   retrieveItem,
   runChoice,
   Slot,
@@ -17,11 +22,15 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $class,
   $effect,
   $familiar,
   $item,
+  $location,
   $skill,
+  $thrall,
   AsdonMartin,
+  FloristFriar,
   get,
   getModifier,
   have,
@@ -38,6 +47,12 @@ const MARKET_QUESTS = [
   { pref: "questM23Meatsmith", url: "shop.php?whichshop=meatsmith&action=talk" },
   { pref: "questM24Doc", url: "shop.php?whichshop=doc&action=talk" },
   { pref: "questM25Armorer", url: "shop.php?whichshop=armory&action=talk" },
+];
+
+const FLORIST_FLOWERS = [
+  FloristFriar.StealingMagnolia,
+  FloristFriar.AloeGuvnor,
+  FloristFriar.PitcherPlant,
 ];
 
 function pull(item: Item): BaggoTask {
@@ -78,6 +93,27 @@ export const SETUP_TASKS: BaggoTask[] = [
       runChoice(1);
     },
   })),
+  {
+    name: "Closet Massagers",
+    completed: () => itemAmount($item`personal massager`) === 0,
+    do: () => putCloset(itemAmount($item`personal massager`), $item`personal massager`),
+    limit: { tries: 1 },
+  },
+  {
+    name: "Spice Ghost",
+    ready: () => myClass() === $class`Pastamancer` && have($skill`Bind Spice Ghost`),
+    completed: () => myThrall() === $thrall`Spice Ghost`,
+    do: () => useSkill($skill`Bind Spice Ghost`),
+    limit: { tries: 1 },
+  },
+  {
+    name: "Florist Friar",
+    ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
+    completed: () =>
+      FloristFriar.isFull() || FLORIST_FLOWERS.every((flower) => !flower.available()),
+    do: () => FLORIST_FLOWERS.forEach((flower) => flower.plant()),
+    limit: { tries: 1 },
+  },
   {
     name: "Pool Table",
     ready: () => $item`Clan pool table`.name in getClanLounge(),

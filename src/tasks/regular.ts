@@ -3,27 +3,18 @@ import {
   canAdventure,
   expectedColdMedicineCabinet,
   getWorkshed,
-  itemAmount,
   Location,
-  myClass,
-  myLocation,
-  myThrall,
-  putCloset,
   runChoice,
   totalTurnsPlayed,
-  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
-  $class,
   $item,
   $location,
   $monster,
   $skill,
-  $thrall,
   AutumnAton,
   Counter,
-  FloristFriar,
   get,
   getKramcoWandererChance,
   have,
@@ -40,34 +31,7 @@ import { baggoOutfit } from "../outfit";
 import { EFFECTS } from "../effects";
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 
-const FLORIST_FLOWERS = [
-  FloristFriar.StealingMagnolia,
-  FloristFriar.AloeGuvnor,
-  FloristFriar.PitcherPlant,
-];
-
 export const REGULAR_TASKS: BaggoTask[] = [
-  {
-    name: "Closet Massagers",
-    completed: () => itemAmount($item`personal massager`) === 0,
-    do: () => putCloset(itemAmount($item`personal massager`), $item`personal massager`),
-    limit: { tries: 1 },
-  },
-  {
-    name: "Spice Ghost",
-    ready: () => myClass() === $class`Pastamancer` && have($skill`Bind Spice Ghost`),
-    completed: () => myThrall() === $thrall`Spice Ghost`,
-    do: () => useSkill($skill`Bind Spice Ghost`),
-    limit: { tries: 1 },
-  },
-  {
-    name: "Florist Friar",
-    ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
-    completed: () =>
-      FloristFriar.isFull() || FLORIST_FLOWERS.every((flower) => !flower.available()),
-    do: () => FLORIST_FLOWERS.forEach((flower) => flower.plant()),
-    limit: { tries: 1 },
-  },
   {
     name: "Digitized Wanderer",
     completed: () => Counter.get("Digitize Monster") > 0,
