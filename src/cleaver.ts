@@ -1,5 +1,7 @@
 import { Item, myAdventures } from "kolmafia";
 import { $item, get, getSaleValue, JuneCleaver, maxBy, sum } from "libram";
+import { args } from "./args";
+import { turnsRemaining } from "./lib";
 
 const juneCleaverChoiceValues = {
   1467: {
@@ -65,6 +67,26 @@ export function juneCleaverBonusEquip(): Map<Item, number> {
   choiceAdventuresValue ??= sum([...JuneCleaver.choices], (choice) =>
     valueJuneCleaverOption(juneCleaverChoiceValues[choice][bestJuneCleaverOption(choice)])
   );
+
+  if (args.ascending && turnsRemaining() <= 180 && JuneCleaver.getInterval() === 30) {
+    const availEV =
+      sum([...JuneCleaver.choicesAvailable()], (choice) =>
+        valueJuneCleaverOption(juneCleaverChoiceValues[choice][bestJuneCleaverOption(choice)])
+      ) / JuneCleaver.choicesAvailable().length;
+
+    const queueEV =
+      sum([...JuneCleaver.queue()], (choice) => {
+        const choiceValue = valueJuneCleaverOption(
+          juneCleaverChoiceValues[choice][bestJuneCleaverOption(choice)]
+        );
+        const cleaverEncountersLeft = Math.floor(turnsRemaining() / 30);
+        const encountersToQueueExit = 1 + JuneCleaver.queue().indexOf(choice);
+        const chancesLeft = cleaverEncountersLeft - encountersToQueueExit;
+        const encounterProbability = 1 - Math.pow(2 / 3, chancesLeft);
+        return choiceValue * encounterProbability;
+      }) / JuneCleaver.queue().length;
+    choiceAdventuresValue = queueEV + availEV;
+  }
 
   return new Map([[JuneCleaver.cleaver, choiceAdventuresValue / JuneCleaver.getInterval()]]);
 }
