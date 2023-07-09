@@ -1,6 +1,6 @@
 import { args } from "./args";
 import { SimulatedState } from "./simulated-state";
-import { Engine } from "./engine/engine";
+import { BaggoEngine } from "./engine/engine";
 import { gyou, isSober } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
 import { myClass, outfitPieces, totalTurnsPlayed } from "kolmafia";
@@ -25,7 +25,7 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
     outfit.equipFirst($items`mime army infiltration glove, tiny black hole`);
   }
 
-  if (!Engine.runSource) {
+  if (!BaggoEngine.runSource) {
     outfit.equipFirst($items`Greatest American Pants, navel ring of navel gazing`);
   }
 

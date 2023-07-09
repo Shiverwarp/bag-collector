@@ -1,12 +1,14 @@
-import { Engine } from "./engine/engine";
+import { BaggoEngine } from "./engine/engine";
 import { args } from "./args";
 import { endTracking, startTracking } from "./session";
-import { BaggoQuest } from "./tasks/baggo";
-import { DailiesQuest } from "./tasks/dailies";
 import { Args, getTasks } from "grimoire-kolmafia";
-import { availableAmount, Monster, wait } from "kolmafia";
+import { availableAmount, Monster, myAdventures, wait } from "kolmafia";
 import { $item, $monster } from "libram";
 import { debug } from "./lib";
+import { NEP_TASKS } from "./tasks/nep";
+import { SETUP_TASKS } from "./tasks/setup";
+import { REGULAR_TASKS } from "./tasks/regular";
+import { BaggoQuest } from "./engine/task";
 
 export let olfactMonster: Monster | undefined;
 
@@ -44,8 +46,12 @@ export function main(command?: string): void {
     wait(5);
   }
 
-  const tasks = getTasks([DailiesQuest(), BaggoQuest()]);
-  const engine = new Engine(tasks);
+  const quest: BaggoQuest = {
+    name: "Baggo",
+    completed: () => myAdventures() < 1,
+    tasks: [...SETUP_TASKS, ...REGULAR_TASKS, ...NEP_TASKS],
+  };
+  const engine = new BaggoEngine(getTasks([quest]));
 
   startTracking();
 
