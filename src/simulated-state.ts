@@ -120,7 +120,7 @@ export class SimulatedState {
   /**
    * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the SimulatedState instance.
    */
-  valueOf(famWeight: number, itemDrop: number): number {
+  meatValueOf(famWeight: number, itemDrop: number): number {
     return (
       (new SimulatedState(
         this.outfit,
@@ -137,7 +137,7 @@ export class SimulatedState {
    */
   makeValuator(): (famWeight: number, itemDrop: number) => number {
     return (famWeight: number, itemDrop: number) => {
-      return this.valueOf(famWeight, itemDrop);
+      return this.meatValueOf(famWeight, itemDrop);
     };
   }
 }
