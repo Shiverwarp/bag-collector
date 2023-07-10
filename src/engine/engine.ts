@@ -1,4 +1,5 @@
 import { args } from "../args";
+import { getHalloweinerChoices } from "../resources/halloweiner";
 import { SimulatedState } from "../simulated-state";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
@@ -110,5 +111,6 @@ export class BaggoEngine extends Engine<CombatActions, BaggoTask> {
 
   initPropertiesManager(manager: PropertiesManager): void {
     manager.set({ hpAutoRecovery: 0.5, hpAutoRecoveryTarget: 1.0 });
+    manager.setChoices(getHalloweinerChoices());
   }
 }
