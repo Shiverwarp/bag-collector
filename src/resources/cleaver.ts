@@ -1,7 +1,7 @@
 import { Item, myAdventures } from "kolmafia";
 import { $item, get, getSaleValue, JuneCleaver, maxBy, sum } from "libram";
-import { args } from "./args";
-import { turnsRemaining } from "./lib";
+import { args } from "../args";
+import { turnsRemaining } from "../lib";
 
 const juneCleaverChoiceValues = {
   1467: {
@@ -69,7 +69,7 @@ export function juneCleaverBonusEquip(): Map<Item, number> {
       valueJuneCleaverOption(juneCleaverChoiceValues[choice][bestJuneCleaverOption(choice)])
     ) / JuneCleaver.choices.length;
 
-  if (args.ascending && turnsRemaining() <= 180 && JuneCleaver.getInterval() === 30) {
+  if (args.ascend && turnsRemaining() <= 180 && JuneCleaver.getInterval() === 30) {
     const availEV =
       sum([...JuneCleaver.choicesAvailable()], (choice) =>
         valueJuneCleaverOption(juneCleaverChoiceValues[choice][bestJuneCleaverOption(choice)])
