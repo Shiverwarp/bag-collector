@@ -12,6 +12,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $effect,
   $item,
   $location,
   $monster,
@@ -24,6 +25,7 @@ import {
   JuneCleaver,
   Macro,
   SourceTerminal,
+  uneffect,
   withProperty,
 } from "libram";
 import { args } from "../args";
@@ -59,6 +61,10 @@ export const REGULAR_TASKS: BaggoTask[] = [
           myInebriety() > inebrietyLimit() ? $location`Drunken Stupor` : $location`Noob Cave`;
         adv1(target, -1, "");
       }),
+    post: (): void => {
+      if (["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")))
+        uneffect($effect`Beaten Up`);
+    },
     choices: juneCleaverChoices,
     outfit: { weapon: $item`June cleaver` },
     combat: new BaggoCombatStrategy().macro(Macro.abort()),
