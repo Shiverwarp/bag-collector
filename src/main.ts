@@ -3,7 +3,7 @@ import { args } from "./args";
 import { endTracking, startTracking } from "./session";
 import { Args, getTasks } from "grimoire-kolmafia";
 import { availableAmount, Monster, myAdventures, wait } from "kolmafia";
-import { $item, $monster } from "libram";
+import { $item, $monster, sinceKolmafiaRevision } from "libram";
 import { debug } from "./lib";
 import { NEP_TASKS } from "./tasks/nep";
 import { SETUP_TASKS } from "./tasks/setup";
@@ -34,6 +34,8 @@ export function chooseOlfactMonster(): Monster | undefined {
 }
 
 export function main(command?: string): void {
+  sinceKolmafiaRevision(27461);
+
   Args.fill(args, command);
   if (args.help) {
     Args.showHelp(args);

@@ -1,20 +1,21 @@
 import { args } from "../args";
+import { getHalloweinerChoices } from "../resources/halloweiner";
 import { SimulatedState } from "../simulated-state";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
 import { BaggoTask } from "./task";
 import { CombatResources, CombatStrategy, Engine, Outfit } from "grimoire-kolmafia";
-import { haveEffect, haveEquipped, Item, mallPrice, myAdventures, toInt } from "kolmafia";
+import { haveEquipped, Item, mallPrice, toInt } from "kolmafia";
 import {
   $effect,
   $item,
   $items,
+  get,
   getBanishedMonsters,
   have,
   Macro,
   PropertiesManager,
-  uneffect,
 } from "libram";
 
 type FreeRun = { item: Item; successRate: number; price: number };
@@ -74,21 +75,8 @@ export class BaggoEngine extends Engine<CombatActions, BaggoTask> {
   }
 
   execute(task: BaggoTask): void {
-    const beaten_turns = haveEffect($effect`Beaten Up`);
-    const start_advs = myAdventures();
     super.execute(task);
-    // Crash if we unexpectedly lost the fight
-    if (have($effect`Beaten Up`) && haveEffect($effect`Beaten Up`) <= 3) {
-      // Poetic Justice gives 5
-      if (
-        haveEffect($effect`Beaten Up`) > beaten_turns || // Turns of beaten-up increased, so we lost
-        (haveEffect($effect`Beaten Up`) === beaten_turns && myAdventures() < start_advs) // Turns of beaten-up was constant but adventures went down, so we lost fight while already beaten up
-      )
-        throw `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
-          $effect`Beaten Up`
-        )}, (${start_advs} => ${myAdventures()}); stop.`;
-    }
-    uneffect($effect`Beaten Up`);
+    if (have($effect`Beaten Up`) || get("_lastCombatLost", false)) throw "Fight was lost";
   }
 
   customize(
@@ -110,5 +98,6 @@ export class BaggoEngine extends Engine<CombatActions, BaggoTask> {
 
   initPropertiesManager(manager: PropertiesManager): void {
     manager.set({ hpAutoRecovery: 0.5, hpAutoRecoveryTarget: 1.0 });
+    manager.setChoices(getHalloweinerChoices());
   }
 }
