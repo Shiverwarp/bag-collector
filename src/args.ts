@@ -6,6 +6,11 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     default: Infinity,
     setting: "",
   }),
+  ascend: Args.boolean({
+    help: "Operate under the assumption that you're ascending today, rather than experiencing rollover.",
+    default: false,
+    setting: "",
+  }),
   bagvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
   olfact: Args.string({
     help: "Which monster to olfact.",
