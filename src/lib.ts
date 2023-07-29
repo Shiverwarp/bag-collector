@@ -94,7 +94,7 @@ export function bestVykeaLevel(): number {
   const vykeaProfit = (vykea: { level: number; dowelCost: number }) => {
     const { level, dowelCost } = vykea;
     return (
-      myAdventures() * args.bag_value * 0.1 * level -
+      myAdventures() * args.bagvalue * 0.1 * level -
       (10 * mallPrice($item`VYKEA rail`) +
         dowelCost * mallPrice($item`VYKEA dowel`) +
         1 * mallPrice($item`VYKEA instructions`))
