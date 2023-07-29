@@ -4,6 +4,7 @@ import {
   inebrietyLimit,
   Item,
   itemAmount,
+  mallPrice,
   myAdventures,
   myFamiliar,
   myInebriety,
@@ -13,7 +14,7 @@ import {
   retrieveItem,
   toInt,
 } from "kolmafia";
-import { $familiar, $path, get, withProperty } from "libram";
+import { $familiar, $item, $path, get, withProperty, maxBy } from "libram";
 import { args } from "./args";
 import { SimulatedState } from "./simulated-state";
 
@@ -80,4 +81,28 @@ export function turnsRemaining(): number {
 
 export function isSober(): boolean {
   return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
+}
+
+export function bestVykeaLevel(): number {
+  const vykeas = [
+    { level: 1, dowelCost: 0 },
+    { level: 2, dowelCost: 1 },
+    { level: 3, dowelCost: 11 },
+    { level: 1, dowelCost: 23 },
+    { level: 2, dowelCost: 37 },
+  ];
+  const vykeaProfit = (vykea: { level: number; dowelCost: number }) => {
+    const { level, dowelCost } = vykea;
+    return (
+      myAdventures() * args.bag_value * 0.1 * level -
+      (10 * mallPrice($item`VYKEA rail`) +
+        dowelCost * mallPrice($item`VYKEA dowel`) +
+        1 * mallPrice($item`VYKEA instructions`))
+    );
+  };
+
+  if (vykeas.some((vykea) => vykeaProfit(vykea) > 0)) {
+    return maxBy(vykeas, vykeaProfit).level;
+  }
+  return 0;
 }
