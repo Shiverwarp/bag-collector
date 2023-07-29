@@ -9,6 +9,7 @@ import { NEP_TASKS } from "./tasks/nep";
 import { SETUP_TASKS } from "./tasks/setup";
 import { REGULAR_TASKS } from "./tasks/regular";
 import { BaggoQuest } from "./engine/task";
+import { TCRS_QUEST } from "./quests/tcrs/tcrs";
 
 export let olfactMonster: Monster | undefined;
 
@@ -48,12 +49,28 @@ export function main(command?: string): void {
     wait(5);
   }
 
-  const quest: BaggoQuest = {
+  const setup: BaggoQuest = {
+    name: "Setup",
+    completed: () => myAdventures() < 1,
+    tasks: [...SETUP_TASKS, ...REGULAR_TASKS, ...NEP_TASKS],
+  };
+
+  const tcrs = TCRS_QUEST;
+
+  const baggo: BaggoQuest = {
     name: "Baggo",
     completed: () => myAdventures() < 1,
     tasks: [...SETUP_TASKS, ...REGULAR_TASKS, ...NEP_TASKS],
   };
-  const engine = new BaggoEngine(getTasks([quest]));
+
+  if (setup) {
+    console.log("");
+  }
+  if (baggo) {
+    console.log("");
+  }
+
+  const engine = new BaggoEngine(getTasks([tcrs]));
 
   startTracking();
 
