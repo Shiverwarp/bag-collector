@@ -1,5 +1,5 @@
-import { canInteract, runChoice, toUrl, visitUrl } from "kolmafia";
-import { $location, $monsters, $skill, get, Macro } from "libram";
+import { canInteract, mallPrice, runChoice, totalTurnsPlayed, toUrl, visitUrl } from "kolmafia";
+import { $item, $location, $monsters, $skill, get, Macro } from "libram";
 import { args } from "../args";
 import { gyou, isSober, turnsRemaining } from "../lib";
 import { olfactMonster } from "../main";
@@ -41,6 +41,13 @@ export const NEP_TASKS: BaggoTask[] = [
     outfit: baggoOutfit,
     effects: EFFECTS,
     choices: { 1324: 5 },
+    acquire: [
+      {
+        item: $item`Spooky VHS Tape`,
+        useful: () => mallPrice($item`Spooky VHS Tape`) < args.bagvalue,
+        price: args.bagvalue,
+      },
+    ],
     combat: new BaggoCombatStrategy()
       .startingMacro(() => Macro.externalIf(!isSober(), Macro.attack().repeat()))
       .banish($monsters`biker, party girl, "plain" girl`)
@@ -57,6 +64,10 @@ export const NEP_TASKS: BaggoTask[] = [
             .if_(
               "!hppercentbelow 75 && !mpbelow 40",
               Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)
+            )
+            .externalIf(
+              get("spookyVHSTapeMonsterTurn", 0) <= totalTurnsPlayed(),
+              Macro.tryItem($item`Spooky VHS Tape`)
             ),
         $monsters`burnout, jock`
       )
