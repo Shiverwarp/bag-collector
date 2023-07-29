@@ -14,7 +14,7 @@ import {
   retrieveItem,
   toInt,
 } from "kolmafia";
-import { $familiar, $item, $path, get, withProperty, maxBy } from "libram";
+import { $familiar, $item, $path, get, maxBy, withProperty } from "libram";
 import { args } from "./args";
 import { SimulatedState } from "./simulated-state";
 
