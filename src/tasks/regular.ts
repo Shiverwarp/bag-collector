@@ -51,10 +51,12 @@ export const REGULAR_TASKS: BaggoTask[] = [
     },
     combat: new BaggoCombatStrategy().kill(),
     effects: EFFECTS,
+    limit: { completed: true },
   },
   {
     name: "June Cleaver",
-    completed: () => !JuneCleaver.have() || !!get("_juneCleaverFightsLeft"),
+    completed: () => get("_juneCleaverFightsLeft") > 0,
+    ready: () => JuneCleaver.have(),
     do: () =>
       withProperty("recoveryScript", "", () => {
         const target =
@@ -68,6 +70,7 @@ export const REGULAR_TASKS: BaggoTask[] = [
     choices: juneCleaverChoices,
     outfit: { weapon: $item`June cleaver` },
     combat: new BaggoCombatStrategy().macro(Macro.abort()),
+    limit: { completed: true },
   },
   {
     name: "Proton Ghost",
@@ -91,6 +94,7 @@ export const REGULAR_TASKS: BaggoTask[] = [
         .trySkill($skill`Shoot Ghost`)
         .trySkill($skill`Trap Ghost`)
     ),
+    limit: { completed: true },
   },
   {
     name: "Kramco",
@@ -105,6 +109,7 @@ export const REGULAR_TASKS: BaggoTask[] = [
       };
     },
     combat: new BaggoCombatStrategy().kill(),
+    limit: { completed: true },
   },
   {
     name: "Cold Medicine Cabinet",
@@ -125,5 +130,6 @@ export const REGULAR_TASKS: BaggoTask[] = [
     do: (): void => {
       AutumnAton.sendTo($location`The Neverending Party`);
     },
+    limit: { completed: true },
   },
 ];
