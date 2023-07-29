@@ -247,7 +247,7 @@ export const SETUP_TASKS: BaggoTask[] = [
     name: "Configure Vykea",
     ready: () => get("_VYKEACompanionLevel") === 0 && bestVykeaLevel() > 0,
     completed: () => get("_VYKEACompanionLevel") > 0,
-    do: () => cliExecute(`create level ${bestVykeaLevel()} couch`),
+    do: () => cliExecute(`create level ${bestVykeaLevel()} lamp`),
     acquire: [{ item: $item`VYKEA hex key` }],
   },
 ];
