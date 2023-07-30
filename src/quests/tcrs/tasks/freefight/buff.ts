@@ -1,10 +1,10 @@
 import { cliExecute, Effect } from "kolmafia";
 import {
+  $effect,
   $effects,
   $item,
-  // BeachComb,
+  $location,
   CursedMonkeyPaw,
-  // Witchess,
   ensureEffect,
   get,
   getModifier,
@@ -16,7 +16,7 @@ const blockedEffects: Effect[] = [];
 const blockedMonkeyWishes: Effect[] = [];
 const blockedGenieWishes: Effect[] = [];
 
-const ensureTask = (effect: Effect): BaggoTask[] => {
+const ensureBuff = (effect: Effect): BaggoTask[] => {
   return [
     {
       name: `gain ${effect.name}`,
@@ -34,16 +34,22 @@ const ensureTask = (effect: Effect): BaggoTask[] => {
       completed: () =>
         have(effect) ||
         get("_monkeyPawWishesUsed") >= 5 ||
-        blockedMonkeyWishes.indexOf(effect) > -1,
+        blockedMonkeyWishes.indexOf(effect) > -1 ||
+        effect.attributes.includes("nohookah"),
       do: () => {
         CursedMonkeyPaw.wishFor(effect);
+        blockedMonkeyWishes.push(effect);
       },
     },
     {
       name: `genie wish ${effect.name}`,
-      completed: () => have(effect) || blockedGenieWishes.indexOf(effect) > -1,
+      completed: () =>
+        have(effect) ||
+        blockedGenieWishes.indexOf(effect) > -1 ||
+        effect.attributes.includes("nohookah"),
       do: () => {
         cliExecute(`genie effect ${effect.name}`);
+        blockedGenieWishes.push(effect);
       },
       acquire: [
         {
@@ -55,22 +61,18 @@ const ensureTask = (effect: Effect): BaggoTask[] => {
   ];
 };
 
-const famWeightTasks: BaggoTask[] = $effects``
+const famWeightTasks: BaggoTask[] = [];
+$effects``
   .filter((effect: Effect) => getModifier("Familiar Weight", effect) > 0)
-  .reduce((tasks: any, effect) => tasks.push(ensureTask(effect)), []);
+  .forEach((effect) => {
+    famWeightTasks.push(...ensureBuff(effect));
+  });
 
 export const BUFF_TASKS: BaggoTask[] = [
-  // {
-  //   name: "Beach buff",
-  //   ready: () => have($item`beach comb`),
-  //   completed: () => have($effect`Do I Know You From Somewhere?`),
-  //   do: () => BeachComb.tryHead($effect`Do I Know You From Somewhere?`),
-  // },
-  // {
-  //   name: "Witchess buff",
-  //   ready: () => Witchess.have(),
-  //   completed: () => get("_witchessBuff"),
-  //   do: () => Witchess,
-  // },
+  {
+    name: "oasis",
+    completed: () => have($effect`ultrahydrated`),
+    do: $location`The Oasis`,
+  },
   ...famWeightTasks,
 ];

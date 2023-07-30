@@ -2,7 +2,7 @@ import { BaggoEngine } from "./engine/engine";
 import { args } from "./args";
 import { endTracking, startTracking } from "./session";
 import { Args, getTasks } from "grimoire-kolmafia";
-import { availableAmount, Monster, myAdventures, wait } from "kolmafia";
+import { availableAmount, Monster, myAdventures, print, wait } from "kolmafia";
 import { $item, $monster, sinceKolmafiaRevision } from "libram";
 import { debug } from "./lib";
 import { NEP_TASKS } from "./tasks/nep";
@@ -64,10 +64,10 @@ export function main(command?: string): void {
   };
 
   if (setup) {
-    console.log("");
+    print("");
   }
   if (baggo) {
-    console.log("");
+    print("");
   }
 
   const engine = new BaggoEngine(getTasks([tcrs]));

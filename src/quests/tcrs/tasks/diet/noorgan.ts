@@ -23,12 +23,13 @@ export const NO_ORGAN_TASKS: BaggoTask[] = [
   {
     name: "Ancestral recall",
     ready: () => have($skill`Ancestral Recall`) && mallPrice($item`blue mana`) < 3 * args.bagvalue,
-    completed: () => get("ancestralRecallCasts", 0) >= 10,
-    do: () => useSkill($skill`Ancestral Recall`),
+    completed: () => get("_ancestralRecallCasts", 0) >= 10,
+    do: () => useSkill($skill`Ancestral Recall`, 10 - get("_ancestralRecallCasts", 0)),
     acquire: () => [
       {
         item: $item`blue mana`,
         price: 3 * args.bagvalue,
+        num: 10 - get("_ancestralRecallCasts", 0),
       },
     ],
   },
