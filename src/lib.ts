@@ -88,8 +88,8 @@ export function bestVykeaLevel(): number {
     { level: 1, dowelCost: 0 },
     { level: 2, dowelCost: 1 },
     { level: 3, dowelCost: 11 },
-    { level: 1, dowelCost: 23 },
-    { level: 2, dowelCost: 37 },
+    { level: 4, dowelCost: 23 },
+    { level: 5, dowelCost: 37 },
   ];
   const vykeaProfit = (vykea: { level: number; dowelCost: number }) => {
     const { level, dowelCost } = vykea;

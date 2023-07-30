@@ -66,7 +66,7 @@ export const NEP_TASKS: BaggoTask[] = [
               Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)
             )
             .externalIf(
-              get("spookyVHSTapeMonsterTurn", 0) <= totalTurnsPlayed(),
+              get("spookyVHSTapeMonsterTurn", 0) <= totalTurnsPlayed() - 8,
               Macro.tryItem($item`Spooky VHS Tape`)
             ),
         $monsters`burnout, jock`
