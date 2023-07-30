@@ -50,14 +50,10 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
   outfit.setModes({ parka: "ghostasaurus" });
 
   const valuator = SimulatedState.baseline(outfit).makeValuator();
-  let modifier = `${valuator(1, 0).toFixed(2)}familiar weight, ${valuator(0, 1).toFixed(
-    2
-  )}item drop`;
-  if (get("baggo_2crs")) {
-    modifier = `+familiar weight`;
-  }
   outfit.equip({
-    modifier,
+    modifier: `${valuator(1, 0).toFixed(2)}familiar weight, ${valuator(0, 1).toFixed(
+      2
+    )}item drop 2000 max`,
     avoid: [$item`time-twitching toolbelt`], // Might be uncessary in recent versions of mafia
   });
   return outfit;
