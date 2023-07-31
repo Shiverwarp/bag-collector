@@ -2,7 +2,7 @@ import { BaggoEngine } from "./engine/engine";
 import { args } from "./args";
 import { endTracking, startTracking } from "./session";
 import { Args, getTasks } from "grimoire-kolmafia";
-import { availableAmount, Monster, myAdventures, print, wait } from "kolmafia";
+import { availableAmount, Monster, myAdventures, wait } from "kolmafia";
 import { $item, $monster, sinceKolmafiaRevision } from "libram";
 import { debug } from "./lib";
 import { NEP_TASKS } from "./tasks/nep";
@@ -52,7 +52,7 @@ export function main(command?: string): void {
   const setup: BaggoQuest = {
     name: "Setup",
     completed: () => myAdventures() < 1,
-    tasks: [...SETUP_TASKS, ...REGULAR_TASKS, ...NEP_TASKS],
+    tasks: [...SETUP_TASKS],
   };
 
   const tcrs = TCRS_QUEST;
@@ -60,17 +60,10 @@ export function main(command?: string): void {
   const baggo: BaggoQuest = {
     name: "Baggo",
     completed: () => myAdventures() < 1,
-    tasks: [...SETUP_TASKS, ...REGULAR_TASKS, ...NEP_TASKS],
+    tasks: [...REGULAR_TASKS, ...NEP_TASKS],
   };
 
-  if (setup) {
-    print("");
-  }
-  if (baggo) {
-    print("");
-  }
-
-  const engine = new BaggoEngine(getTasks([tcrs]));
+  const engine = new BaggoEngine(getTasks([setup, tcrs, baggo]));
 
   startTracking();
 

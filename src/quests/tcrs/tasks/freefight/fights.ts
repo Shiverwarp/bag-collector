@@ -1,5 +1,6 @@
 import { BaggoTask } from "../../../../engine/task";
 import { cleaverTask } from "./shared";
+import { get, set } from "libram";
 import * as LOV from "./lov";
 import * as Oasis from "./oasis";
 import * as Gingerbread from "./gingerbread";
@@ -42,6 +43,12 @@ const freeFightTaskGroups = [
 
 freeFightTaskGroups.forEach((tasks) => {
   freeFightTasks.push(...tasks.freefightTasks);
+});
+
+freeFightTasks.push({
+  name: "freefights completed",
+  completed: () => get("_baggo_freefights", "") === "true",
+  do: () => set("_baggo_freefights", "true"),
 });
 
 export const getFreeFightTasks = (): BaggoTask[] => {

@@ -14,7 +14,7 @@ export const freefightTasks: BaggoTask[] = [
   {
     name: "pocket professor",
     ready: () => have($familiar`Pocket Professor`) && Witchess.have(),
-    completed: () => true || get("_pocketProfessorLectures") >= pocketProfessorLectures(),
+    completed: () => get("_pocketProfessorLectures") >= pocketProfessorLectures(),
     outfit: () => ({
       equip: [
         $item`June cleaver`,

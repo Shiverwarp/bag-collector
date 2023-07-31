@@ -187,12 +187,12 @@ export const SETUP_TASKS: BaggoTask[] = [
     outfit: () => itemFamiliarSpec(),
     limit: { tries: 1 },
   },
-  {
-    name: "Clan Fortune",
-    ready: () => $item`Clan Carnival Game`.name in getClanLounge(),
-    completed: () => get("_clanFortuneBuffUsed"),
-    do: () => cliExecute("fortune buff item"),
-  },
+  // {
+  //   name: "Clan Fortune",
+  //   ready: () => $item`Clan Carnival Game`.name in getClanLounge(),
+  //   completed: () => get("_clanFortuneBuffUsed"),
+  //   do: () => cliExecute("fortune buff item"),
+  // },
   {
     name: "SongBoom",
     ready: () => SongBoom.have() && SongBoom.songChangesLeft() > 0,
