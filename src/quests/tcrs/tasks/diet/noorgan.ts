@@ -46,6 +46,18 @@ export const NO_ORGAN_TASKS: BaggoTask[] = [
     ],
   },
   {
+    name: "Borrowed Time",
+    ready: () => mallPrice($item`borrowed time`) < 20 * args.bagvalue,
+    completed: () => get("_borrowedTimeUsed"),
+    do: () => use($item`borrowed time`),
+    acquire: () => [
+      {
+        item: $item`borrowed time`,
+        price: 20 * args.bagvalue,
+      },
+    ],
+  },
+  {
     name: "Class chocolate",
     ready: () => mallPrice(classChoco) < (3 - get("_chocolatesUsed", 0)) * args.bagvalue,
     completed: () => get("_chocolatesUsed") >= 3,

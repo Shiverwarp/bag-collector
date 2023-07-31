@@ -10,11 +10,42 @@ import {
   getModifier,
   have,
 } from "libram";
-import { BaggoTask } from "../../../../engine/task";
+import { BaggoTask } from "../../../engine/task";
 
-const blockedEffects: Effect[] = [];
-const blockedMonkeyWishes: Effect[] = [];
-const blockedGenieWishes: Effect[] = [];
+// Not accessible in 2crs :(.
+
+const blocklist: Effect[] = [
+  $effect`Green Tongue`,
+  $effect`Black Tongue`,
+  $effect`Cold Hearted`,
+  $effect`ChibiChanged™`,
+  $effect`Video... Games?`,
+  $effect`Unbarking Dogs`,
+  $effect`Sugar-Frosted Pet Guts`,
+  $effect`Pajama Party`,
+  $effect`Robot Friends`,
+  $effect`Smart Drunk`,
+  $effect`The Inquisitor's Unknown Effect`,
+  $effect`She Ate Too Much Candy`,
+  $effect`Thanksgetting`,
+  $effect`Wassailing You`,
+  $effect`Spirit of Galactic Unity`,
+  $effect`Meteor Showered`,
+  $effect`Gleam-Inducing`,
+  $effect`Party on Your Skin`,
+  $effect`Boxing Day Glow`,
+  $effect`Crimbeau'd`,
+  $effect`Panna Consideration`,
+  $effect`Yeg's Glory`,
+  $effect`Shortly Stacked`,
+  $effect`In the Depths`,
+  $effect`Reliable Backup`,
+  $effect`Soothing Flute`,
+];
+
+const blockedEffects: Effect[] = [...blocklist];
+const blockedMonkeyWishes: Effect[] = [...blocklist];
+const blockedGenieWishes: Effect[] = [...blocklist];
 
 const ensureBuff = (effect: Effect): BaggoTask[] => {
   return [
@@ -71,7 +102,14 @@ $effects``
 export const BUFF_TASKS: BaggoTask[] = [
   {
     name: "oasis",
-    completed: () => have($effect`ultrahydrated`),
+    completed: () => have($effect`Ultrahydrated`),
+    do: $location`The Oasis`,
+  },
+  {
+    // For whatever reason, getting `vide games...?` doesnt work, so we do it manually.
+    name: "defective game grid token",
+    ready: () => have($item`defective Game Grid token`),
+    completed: () => get("_defectiveTokenUsed"),
     do: $location`The Oasis`,
   },
   ...famWeightTasks,

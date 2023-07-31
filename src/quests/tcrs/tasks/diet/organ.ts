@@ -175,7 +175,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     name: "sweat out some booze",
     ready: () => myInebriety() >= 1 && get("sweat") >= 25,
     completed: () => get("_sweatOutSomeBoozeUsed") >= 3,
-    do: () => useSkill($skill`sweat out some booze`),
+    do: () => useSkill($skill`Sweat Out Some Booze`),
   },
   {
     name: "milk of magnesium",
