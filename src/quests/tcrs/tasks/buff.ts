@@ -1,4 +1,4 @@
-import { cliExecute, Effect } from "kolmafia";
+import { cliExecute, Effect, use } from "kolmafia";
 import {
   $effect,
   $effects,
@@ -110,7 +110,7 @@ export const BUFF_TASKS: BaggoTask[] = [
     name: "defective game grid token",
     ready: () => have($item`defective Game Grid token`),
     completed: () => get("_defectiveTokenUsed"),
-    do: $location`The Oasis`,
+    do: () => use($item`defective Game Grid token`),
   },
   ...famWeightTasks,
 ];

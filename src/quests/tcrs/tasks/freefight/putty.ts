@@ -1,4 +1,4 @@
-import { $item, get, have, Macro } from "libram";
+import { $item, $monster, get, have, Macro } from "libram";
 import { BaggoTask } from "../../../../engine/task";
 import { BaggoCombatStrategy } from "../../../../engine/combat";
 import { defaultOutfit } from "./shared";
@@ -14,6 +14,8 @@ export const freefightTasks: BaggoTask[] = [
     prepare: (): void => {
       restoreHp(myMaxhp());
     },
-    combat: new BaggoCombatStrategy().macro(Macro.tryItem($item`Spooky Putty sheet`)).kill(),
+    combat: new BaggoCombatStrategy()
+      .macro(Macro.tryItem($item`Spooky Putty sheet`), $monster`Witchess Knight`)
+      .kill(),
   },
 ];
