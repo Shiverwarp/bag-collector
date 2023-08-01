@@ -1,15 +1,5 @@
-import { cliExecute, Effect, use } from "kolmafia";
-import {
-  $effect,
-  $effects,
-  $item,
-  $location,
-  CursedMonkeyPaw,
-  ensureEffect,
-  get,
-  getModifier,
-  have,
-} from "libram";
+import { Effect, use } from "kolmafia";
+import { $effect, $effects, $item, ensureEffect, get, getModifier, have } from "libram";
 import { BaggoTask } from "../../../engine/task";
 
 // Not accessible in 2crs :(.
@@ -44,8 +34,6 @@ const blocklist: Effect[] = [
 ];
 
 const blockedEffects: Effect[] = [...blocklist];
-const blockedMonkeyWishes: Effect[] = [...blocklist];
-const blockedGenieWishes: Effect[] = [...blocklist];
 
 const ensureBuff = (effect: Effect): BaggoTask[] => {
   return [
@@ -60,35 +48,6 @@ const ensureBuff = (effect: Effect): BaggoTask[] => {
         }
       },
     },
-    {
-      name: `monkey wish ${effect.name}`,
-      completed: () =>
-        have(effect) ||
-        get("_monkeyPawWishesUsed") >= 5 ||
-        blockedMonkeyWishes.indexOf(effect) > -1 ||
-        effect.attributes.includes("nohookah"),
-      do: () => {
-        CursedMonkeyPaw.wishFor(effect);
-        blockedMonkeyWishes.push(effect);
-      },
-    },
-    {
-      name: `genie wish ${effect.name}`,
-      completed: () =>
-        have(effect) ||
-        blockedGenieWishes.indexOf(effect) > -1 ||
-        effect.attributes.includes("nohookah"),
-      do: () => {
-        cliExecute(`genie effect ${effect.name}`);
-        blockedGenieWishes.push(effect);
-      },
-      acquire: [
-        {
-          item: $item`pocket wish`,
-          price: 50000,
-        },
-      ],
-    },
   ];
 };
 
@@ -100,11 +59,6 @@ $effects``
   });
 
 export const BUFF_TASKS: BaggoTask[] = [
-  {
-    name: "oasis",
-    completed: () => have($effect`Ultrahydrated`),
-    do: $location`The Oasis`,
-  },
   {
     // For whatever reason, getting `vide games...?` doesnt work, so we do it manually.
     name: "defective game grid token",

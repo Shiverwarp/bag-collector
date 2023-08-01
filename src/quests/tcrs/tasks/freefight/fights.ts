@@ -4,7 +4,6 @@ import { get, set } from "libram";
 import * as LOV from "./lov";
 import * as Oasis from "./oasis";
 import * as Gingerbread from "./gingerbread";
-import * as Buyable from "./buyable";
 import * as Payphone from "./closedcircuitphone";
 import * as Snojo from "./snojo";
 import * as Tentacles from "./tentacles";
@@ -25,7 +24,6 @@ const freeFightTaskGroups = [
   LOV,
   Oasis,
   Gingerbread,
-  Buyable,
   Payphone,
   Snojo,
   Tentacles,
