@@ -1,16 +1,15 @@
 import {
-  Coinmaster,
-  Item,
   autosellPrice,
+  Coinmaster,
   historicalAge,
   historicalPrice,
-  mallPrice,
+  Item,
   myAdventures,
   myTurncount,
   print,
   sellPrice,
-  toInt,
   todayToString,
+  toInt,
 } from "kolmafia";
 import { $item, $items, get, getSaleValue, Session, set, sum } from "libram";
 import { args } from "./args";

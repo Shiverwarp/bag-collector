@@ -1,5 +1,4 @@
-import { $effect, $item, $location, $monsters, $skill, have, Macro } from "libram";
-import { cliExecute } from "kolmafia";
+import { $location, $monsters, $skill, Macro } from "libram";
 import { args } from "../args";
 import { turnsRemaining } from "../lib";
 import { baggoOutfit } from "../outfit";

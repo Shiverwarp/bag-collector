@@ -1,9 +1,9 @@
 import { isSober, realmAvailable } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
 import {
-  Item,
   abort,
   fullnessLimit,
+  Item,
   itemAmount,
   mallPrice,
   myAdventures,
@@ -13,10 +13,8 @@ import {
 import {
   $effect,
   $familiar,
-  $familiars,
   $item,
   $items,
-  $slot,
   CrownOfThrones,
   get,
   getSaleValue,
@@ -24,11 +22,9 @@ import {
   sum,
   sumNumbers,
 } from "libram";
-import { itemFamiliarSpec } from "./familiar/item-familiar";
 import { garboValue } from "./session";
 import { juneCleaverBonusEquip } from "./resources/cleaver";
 
-const adventureFamiliars = $familiars`Temporal Riftlet, Reagnimated Gnome`;
 // https://www.desmos.com/calculator/y8iszw6rfk
 // Very basic linear approximation of the value of additional weight
 const MAGIC_NUMBER = 0.00123839009288;
@@ -59,22 +55,6 @@ function ensureBjorn(weightValue: number, meatValue = 0): CrownOfThrones.Familia
   if (!result) abort("Failed to make sensible bjorn decision!");
 
   return result;
-}
-
-let _baseAdventureValue: number;
-function baseAdventureValue(): number {
-  if (!_baseAdventureValue) {
-    const outfitCandyValue = treatValue(getTreatOutfit());
-    const totOutfitCandyMultiplier = have($familiar`Trick-or-Treating Tot`) ? 1.6 : 1;
-    const bowlValue = (1 / 5) * getSaleValue($item`huge bowl of candy`);
-    const prunetsValue = have($familiar`Trick-or-Treating Tot`)
-      ? 4 * 0.2 * getSaleValue($item`Prunets`)
-      : 0;
-
-    const outfitCandyTotal = 3 * outfitCandyValue * totOutfitCandyMultiplier;
-    _baseAdventureValue = (1 / 5) * (outfitCandyTotal + bowlValue + prunetsValue);
-  }
-  return _baseAdventureValue;
 }
 
 function snowSuit() {
@@ -223,7 +203,7 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
   let weightValue = 0;
   if (outfit.familiar === $familiar`Reagnimated Gnome`) {
     outfit.equip($item`gnomish housemaid's kgnee`);
-    weightValue = Math.round(MAGIC_NUMBER * baseAdventureValue() * 100) / 100;
+    weightValue = Math.round(MAGIC_NUMBER * get(`valueOfAdventure`) * 100) / 100;
   }
 
   if (!have($effect`Everything Looks Yellow`) && isSober()) {
@@ -254,6 +234,8 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
     outfit.equip($item`Crown of Thrones`);
     outfit.enthrone(bjornChoice.familiar);
   }
+
+  outfit.bonuses = fullBonuses();
 
   const itemDropTatterEfficiency = (0.12 / 100) * mallPrice($item`tattered scrap of paper`);
   outfit.modifier.push(`${itemDropTatterEfficiency.toFixed(2)} Item Drop 834 max`);

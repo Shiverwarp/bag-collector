@@ -13,7 +13,7 @@ import {
   use,
   useSkill,
 } from "kolmafia";
-import { $item, $items, $skill, get, have, MayoClinic } from "libram";
+import { $item, $items, $skill, get, have } from "libram";
 import { BaggoTask } from "../../../../engine/task";
 import { args } from "../../../../args";
 
