@@ -110,7 +110,7 @@ export const SETUP_TASKS: BaggoTask[] = [
   },
   {
     name: "Florist Friar",
-    ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
+    ready: () => FloristFriar.have() && myLocation() === $location`The Haunted Library`,
     completed: () =>
       FloristFriar.isFull() || FLORIST_FLOWERS.every((flower) => !flower.available()),
     do: () => FLORIST_FLOWERS.forEach((flower) => flower.plant()),

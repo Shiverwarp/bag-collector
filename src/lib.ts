@@ -106,3 +106,13 @@ export function bestVykeaLevel(): number {
   }
   return 0;
 }
+
+export type RealmType = "spooky" | "stench" | "hot" | "cold" | "sleaze" | "fantasy" | "pirate";
+export function realmAvailable(identifier: RealmType): boolean {
+  if (identifier === "fantasy") {
+    return get(`_frToday`) || get(`frAlways`);
+  } else if (identifier === "pirate") {
+    return get(`_prToday`) || get(`prAlways`);
+  }
+  return get(`_${identifier}AirportToday`) || get(`${identifier}AirportAlways`);
+}
