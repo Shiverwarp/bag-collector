@@ -235,11 +235,4 @@ export const SETUP_TASKS: BaggoTask[] = [
     completed: () => have($item`tiny black hole`),
     limit: { tries: 1 },
   },
-  {
-    name: "Configure Vykea",
-    ready: () => get("_VYKEACompanionLevel") === 0 && bestVykeaLevel() > 0,
-    completed: () => get("_VYKEACompanionLevel") > 0,
-    do: () => cliExecute(`create level ${bestVykeaLevel()} lamp`),
-    acquire: [{ item: $item`VYKEA hex key`, price: 5000 }],
-  },
 ];
