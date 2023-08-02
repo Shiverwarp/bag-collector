@@ -21,6 +21,7 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
   private delevel() {
     return Macro.trySkill($skill`Micrometeorite`)
       .tryItem($item`Rain-Doh indigo cup`)
+      .tryItem($item`porquoise-handled sixgun`)
       .trySkill($skill`Summon Love Mosquito`)
       .tryItem($item`Time-Spinner`)
       .tryItem($item`HOA citation pad`);
