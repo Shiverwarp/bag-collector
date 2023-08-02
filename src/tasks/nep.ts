@@ -8,7 +8,7 @@ import { EFFECTS } from "../effects";
 
 export const NEP_TASKS: BaggoTask[] = [
   {
-    name: "Collect filters",
+    name: "Collect tatters",
     completed: () => turnsRemaining() <= 0 || args.buff,
     do: $location`The Haunted Library`,
     outfit: baggoOutfit,
