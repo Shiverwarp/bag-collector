@@ -10,6 +10,7 @@ import { SETUP_TASKS } from "./tasks/setup";
 import { REGULAR_TASKS } from "./tasks/regular";
 import { BaggoQuest } from "./engine/task";
 import { TCRS_QUEST } from "./quests/tcrs/tcrs";
+import { ORGAN_TASKS } from "./quests/tcrs/tasks/diet/organ";
 
 export let olfactMonster: Monster | undefined;
 
@@ -60,7 +61,7 @@ export function main(command?: string): void {
   const baggo: BaggoQuest = {
     name: "Baggo",
     completed: () => myAdventures() < 1,
-    tasks: [...REGULAR_TASKS, ...NEP_TASKS],
+    tasks: [...REGULAR_TASKS, ...ORGAN_TASKS, ...NEP_TASKS],
   };
 
   const engine = new BaggoEngine(getTasks([setup, tcrs, baggo]));

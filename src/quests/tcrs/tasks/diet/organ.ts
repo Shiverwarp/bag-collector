@@ -3,6 +3,7 @@ import {
   drink,
   eat,
   fullnessLimit,
+  getWorkshed,
   inebrietyLimit,
   mallPrice,
   myFullness,
@@ -31,13 +32,13 @@ const decoratorTasks = dietDecorators.map((decorator) => {
   const { item, done } = decorator;
   return {
     name: item.name,
-    ready: () => mallPrice(item) < args.bagvalue,
+    ready: () => mallPrice(item) < 2 * mallPrice($item`tattered scrap of paper`),
     completed: done,
     do: () => use(item),
     acquire: [
       {
         item: item,
-        price: args.bagvalue,
+        price: 2 * mallPrice($item`tattered scrap of paper`),
       },
     ],
   };
@@ -189,15 +190,10 @@ export const ORGAN_TASKS: BaggoTask[] = [
       },
     ],
   },
-  {
-    name: "Install mayo clinic",
-    completed: MayoClinic.installed,
-    do: () => use($item`portable Mayo Clinic`),
-  },
   ...decoratorTasks,
   {
     name: "drink ghost pepper",
-    ready: () => get("ghostPepperTurnsLeft") === 0,
+    ready: () => get("ghostPepperTurnsLeft") === 0 && getWorkshed() === $item`portable Mayo Clinic`,
     completed: () => myInebriety() >= inebrietyLimit(),
     do: () => use($item`Mayodiol`) && eat($item`ghost pepper`),
     acquire: () => [
@@ -212,7 +208,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
   },
   {
     name: "eat ghost pepper",
-    ready: () => get("ghostPepperTurnsLeft") === 0,
+    ready: () => get("ghostPepperTurnsLeft") === 0 && getWorkshed() === $item`portable Mayo Clinic`,
     completed: () => myFullness() >= fullnessLimit(),
     do: () => use($item`Mayoflex`) && eat($item`ghost pepper`),
     acquire: () => [
