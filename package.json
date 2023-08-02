@@ -1,8 +1,8 @@
 {
   "name": "bag-collector",
   "version": "0.1.0",
-  "description": "A script for farming duffel bags and van keys.",
-  "main": "KoLmafia/scripts/baggo.js",
+  "description": "A script for farming tatters for gausie",
+  "main": "KoLmafia/scripts/gausietatter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "yarn run build:types && yarn run build:bundled",

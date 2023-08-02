@@ -3,7 +3,7 @@ import { build } from "esbuild";
 import babel from "esbuild-plugin-babel";
 
 build({
-  entryPoints: { baggo: "src/main.ts" },
+  entryPoints: { gausietatter: "src/main.ts" },
   outdir: "KoLmafia/scripts",
   bundle: true,
   minifySyntax: true,
