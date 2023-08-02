@@ -31,7 +31,7 @@ export const banishSources: BanishSource[] = [
   },
   {
     name: "Ice House",
-    available: () => retrievePrice($item`ice house`) < 50_000,
+    available: () => retrievePrice($item`ice house`) < 70_000,
     prepare: () => retrieveItem($item`ice house`),
     do: $item`ice house`,
   },
