@@ -41,7 +41,7 @@ import {
 } from "libram";
 import { BaggoTask } from "../engine/task";
 import { itemFamiliarSpec } from "../familiar/item-familiar";
-import { canPull, gyou, ronin, turnsRemaining } from "../lib";
+import { bestVykeaLevel, canPull, gyou, ronin, turnsRemaining } from "../lib";
 
 const MARKET_QUESTS = [
   { pref: "questM23Meatsmith", url: "shop.php?whichshop=meatsmith&action=talk" },
@@ -187,12 +187,12 @@ export const SETUP_TASKS: BaggoTask[] = [
     outfit: () => itemFamiliarSpec(),
     limit: { tries: 1 },
   },
-  {
-    name: "Clan Fortune",
-    ready: () => $item`Clan Carnival Game`.name in getClanLounge(),
-    completed: () => get("_clanFortuneBuffUsed"),
-    do: () => cliExecute("fortune buff item"),
-  },
+  // {
+  //   name: "Clan Fortune",
+  //   ready: () => $item`Clan Carnival Game`.name in getClanLounge(),
+  //   completed: () => get("_clanFortuneBuffUsed"),
+  //   do: () => cliExecute("fortune buff item"),
+  // },
   {
     name: "SongBoom",
     ready: () => SongBoom.have() && SongBoom.songChangesLeft() > 0,
@@ -242,5 +242,12 @@ export const SETUP_TASKS: BaggoTask[] = [
     do: () => retrieveItem($item`tiny black hole`),
     completed: () => have($item`tiny black hole`),
     limit: { tries: 1 },
+  },
+  {
+    name: "Configure Vykea",
+    ready: () => get("_VYKEACompanionLevel") === 0 && bestVykeaLevel() > 0,
+    completed: () => get("_VYKEACompanionLevel") > 0,
+    do: () => cliExecute(`create level ${bestVykeaLevel()} lamp`),
+    acquire: [{ item: $item`VYKEA hex key`, price: 5000 }],
   },
 ];
