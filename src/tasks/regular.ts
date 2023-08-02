@@ -3,12 +3,16 @@ import {
   adv1,
   canAdventure,
   expectedColdMedicineCabinet,
+  fullnessLimit,
   getWorkshed,
   inebrietyLimit,
   Location,
+  myAdventures,
+  myFullness,
   myInebriety,
   runChoice,
   totalTurnsPlayed,
+  use,
   visitUrl,
 } from "kolmafia";
 import {
@@ -123,6 +127,26 @@ export const REGULAR_TASKS: BaggoTask[] = [
       runChoice(5);
     },
     limit: { tries: 5 },
+  },
+  {
+    name: "Swap Workshed to Mayo",
+    ready: () =>
+      !get("_workshedItemUsed") &&
+      getWorkshed() === $item`cold medicine cabinet` &&
+      (get("_coldMedicineConsults") > 4 || myAdventures() < 10),
+    completed: () => getWorkshed() === $item`portable Mayo Clinic`,
+    do: () => use($item`portable Mayo Clinic`),
+  },
+  {
+    name: "Swap Workshed to CMC",
+    ready: () =>
+      !get("_workshedItemUsed") &&
+      getWorkshed() === $item`portable Mayo Clinic` &&
+      myAdventures() <= 85 &&
+      myInebriety() === inebrietyLimit() &&
+      myFullness() === fullnessLimit(),
+    completed: () => getWorkshed() === $item`cold medicine cabinet`,
+    do: () => use($item`cold medicine cabinet`),
   },
   {
     name: "Autumn-Aton",
