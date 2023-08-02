@@ -241,7 +241,7 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
   outfit.modifier.push(`${itemDropTatterEfficiency.toFixed(2)} Item Drop 834 max`);
 
   if (outfit.familiar === $familiar`Grey Goose`) {
-    outfit.modifier.push(`200 Familiar Experience 10 min 10 max`);
+    outfit.modifier.push(`200 Familiar Experience 10 min 23 max`);
   }
   return outfit;
 }
