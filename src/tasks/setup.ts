@@ -172,14 +172,6 @@ export const SETUP_TASKS: BaggoTask[] = [
     limit: { tries: 1 },
   },
   {
-    name: "GAP Vision",
-    ready: () => have($item`Greatest American Pants`) && get("_gapBuffs") < 5,
-    completed: () => get("_gapBuffs") >= 5,
-    do: () => cliExecute("gap Vision"),
-    outfit: { pants: $item`Greatest American Pants` },
-    limit: { tries: 5 },
-  },
-  {
     name: "Mummery Item",
     ready: () => have($item`mumming trunk`),
     completed: () => get("_mummeryMods").includes("Item Drop"),
