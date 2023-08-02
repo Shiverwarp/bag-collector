@@ -1,4 +1,4 @@
-import { isSober, realmAvailable } from "./lib";
+import { isSober, realmAvailable, turnsRemaining } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
 import {
   abort,
@@ -193,7 +193,7 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
   const outfit = new Outfit();
 
   if (includeFamiliar) {
-    if (get(`gooseDronesRemaining`) < 5) {
+    if (get(`gooseDronesRemaining`) < turnsRemaining()) {
       outfit.equip($familiar`Grey Goose`);
     } else {
       outfit.equip($familiar`Reagnimated Gnome`);
