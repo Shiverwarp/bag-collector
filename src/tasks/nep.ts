@@ -5,12 +5,18 @@ import { baggoOutfit } from "../outfit";
 import { BaggoTask } from "../engine/task";
 import { BaggoCombatStrategy } from "../engine/combat";
 import { EFFECTS } from "../effects";
+import { Location, numericModifier } from "kolmafia";
 
 export const NEP_TASKS: BaggoTask[] = [
   {
     name: "Collect tatters",
     completed: () => turnsRemaining() <= 0 || args.buff,
-    do: $location`The Haunted Library`,
+    do: (): Location => {
+      if (numericModifier(`familiar experience`) < 10) {
+        throw "We have less than 10 familiar experience per adventure!";
+      }
+      return $location`The Haunted Library`;
+    },
     outfit: baggoOutfit,
     effects: EFFECTS,
     combat: new BaggoCombatStrategy()
