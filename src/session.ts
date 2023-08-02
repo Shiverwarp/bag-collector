@@ -4,6 +4,7 @@ import {
   historicalAge,
   historicalPrice,
   Item,
+  mallPrice,
   myAdventures,
   myTurncount,
   print,
@@ -12,10 +13,9 @@ import {
   toInt,
 } from "kolmafia";
 import { $item, $items, get, getSaleValue, Session, set, sum } from "libram";
-import { args } from "./args";
 import { adventures, formatNumber, turncount } from "./lib";
 
-const dailyProperties = ["bags", "keys", "adventures", "turns", "meat", "runs"] as const;
+const dailyProperties = ["tatters", "adventures", "turns", "meat"] as const;
 export type DailyProperty = typeof dailyProperties[number];
 export type DailyResult = { current: number; total: number };
 
@@ -34,37 +34,32 @@ export function trackDaily(property: DailyProperty, current = 0): DailyResult {
 }
 
 let sessionStart = Session.current();
-let initialRuns = get("_navelRunaways");
 
 function printResults(results: Record<DailyProperty, DailyResult>, attr: keyof DailyResult): void {
-  const { bags, keys, meat, adventures, turns, runs } = results;
-  const mpa = Math.round(((bags[attr] + keys[attr]) * args.bagvalue + meat[attr]) / turns[attr]);
+  const { tatters, meat, adventures, turns } = results;
+  const mpa = Math.round(
+    (tatters[attr] * mallPrice($item`tattered scrap of paper`) + meat[attr]) / turns[attr]
+  );
   print(`Across ${formatNumber(turns[attr])} you generated`);
-  print(`* ${formatNumber(bags[attr])} duffel bags`, "blue");
-  print(`* ${formatNumber(keys[attr])} van keys`, "blue");
+  print(`* ${formatNumber(tatters[attr])} tatters`, "blue");
   print(`* ${formatNumber(adventures[attr])} advs`, "blue");
-  print(`* ${formatNumber(runs[attr])} GAP/Navel runs`, "blue");
   print(`* ${formatNumber(meat[attr])} meat`, "blue");
   print(`That's ${formatNumber(mpa)} MPA!`, "blue");
 }
 
 export function startTracking(): void {
   sessionStart = Session.current();
-  initialRuns = get("_navelRunaways");
 }
 
 export function endTracking(): void {
   const sessionResults = Session.current().diff(sessionStart);
-  const runs = get("_navelRunaways") - initialRuns;
 
   const turns = myTurncount() - turncount;
   const dailyResults = {
-    bags: trackDaily("bags", sessionResults.items.get($item`unremarkable duffel bag`) ?? 0),
-    keys: trackDaily("keys", sessionResults.items.get($item`van key`) ?? 0),
+    tatters: trackDaily("tatters", sessionResults.items.get($item`tattered scrap of paper`) ?? 0),
     turns: trackDaily("turns", turns),
     adventures: trackDaily("adventures", turns - (adventures - myAdventures())),
     meat: trackDaily("meat", sessionResults.meat),
-    runs: trackDaily("runs", runs),
   };
 
   print("This run of baggo:", "blue");
