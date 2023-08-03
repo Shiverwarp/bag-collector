@@ -152,7 +152,7 @@ function carnPlant(): Map<Item, number> {
   if (!have($item`carnivorous potted plant`)) return new Map<Item, number>();
   // We only want to use carn plant if we've built up a surplus of drones
   // Proc rate is 4%
-  if (get(`gooseDronesRemaining`) < 5) return new Map<Item, number>();
+  if (get(`gooseDronesRemaining`) < turnsRemaining()) return new Map<Item, number>();
   return new Map<Item, number>([
     [$item`carnivorous potted plant`, mallPrice($item`tattered scrap of paper`) * 2 * 0.04],
   ]);
