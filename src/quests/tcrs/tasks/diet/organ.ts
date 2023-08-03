@@ -69,7 +69,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     acquire: [
       {
         item: shotglassBooze,
-        price: 5 * args.bagvalue,
+        price: 5 * get("valueOfAdventure"),
       },
     ],
   },
@@ -234,7 +234,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     acquire: () => [
       {
         item: $item`Special Seasoning`,
-        useful: () => mallPrice($item`Special Seasoning`) < args.bagvalue / 2,
+        useful: () => mallPrice($item`Special Seasoning`) < get("valueOfAdventure"),
       },
       {
         item: $item`Mayodiol`,
@@ -249,7 +249,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     acquire: () => [
       {
         item: $item`Special Seasoning`,
-        useful: () => mallPrice($item`Special Seasoning`) < args.bagvalue / 2,
+        useful: () => mallPrice($item`Special Seasoning`) < get("valueOfAdventure"),
       },
       {
         item: $item`Mayoflex`,
