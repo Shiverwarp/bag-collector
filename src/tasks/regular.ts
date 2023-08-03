@@ -53,7 +53,9 @@ export const REGULAR_TASKS: BaggoTask[] = [
         ? { ...meatFamiliarSpec(), modifier: "meat" }
         : baggoOutfit();
     },
-    combat: new BaggoCombatStrategy().kill(),
+    combat: new BaggoCombatStrategy()
+      .macro(new Macro().trySkill($skill`Emit Matter Duplicating Drones`))
+      .kill(),
     effects: EFFECTS,
     limit: { completed: true },
   },

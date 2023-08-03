@@ -17,32 +17,11 @@ import { $item, $items, $skill, get, have } from "libram";
 import { BaggoTask } from "../../../../engine/task";
 import { args } from "../../../../args";
 
-const dietDecorators = [
-  {
-    item: $item`munchies pill`,
-    done: () => get("munchiesPillsUsed", 0) > 0,
-  },
-  {
-    item: $item`whet stone`,
-    done: () => get("whetstonesUsed", 0) > 0,
-  },
-];
-
-const decoratorTasks = dietDecorators.map((decorator) => {
-  const { item, done } = decorator;
-  return {
-    name: item.name,
-    ready: () => mallPrice(item) < 2 * mallPrice($item`tattered scrap of paper`),
-    completed: done,
-    do: () => use(item),
-    acquire: [
-      {
-        item: item,
-        price: 2 * mallPrice($item`tattered scrap of paper`),
-      },
-    ],
-  };
-});
+const adventureValue = 2 * mallPrice($item`tattered scrap of paper`);
+// Underestimate a bit, cost of ghost pepper 30k
+const profitPerOrganSpace = 15 * adventureValue - 30000;
+const stomachWhetstoneValue = () => get("valueOfAdventure") - mallPrice($item`whet stone`);
+const stomachMunchiesValue = () => 2 * get("valueOfAdventure") - mallPrice($item`munchies pill`);
 
 const shotglassBoozes: any = $items``.filter(
   (item) => item.inebriety === 1 && item.adventures === "5" && item.tradeable
@@ -60,7 +39,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     name: "mojo filter",
     ready: () =>
       mySpleenUse() > 0 &&
-      mallPrice($item`mojo filter`) + mallPrice($item`Breathitin™`) < 25000 + 2 * args.bagvalue,
+      mallPrice($item`mojo filter`) + mallPrice($item`Breathitin™`) < 25000 + 2 * adventureValue,
     completed: () => get("currentMojoFilters", 0) >= 3,
     do: () => use($item`mojo filter`),
     acquire: [
@@ -77,7 +56,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     acquire: [
       {
         item: $item`Breathitin™`,
-        price: 25000 + 2 * args.bagvalue /* one charge: mojo filter + 0.4 adventures */,
+        price: 25000 + 2 * adventureValue /* one charge: mojo filter + 0.4 adventures */,
         num: spleenLimit() - mySpleenUse(),
       },
     ],
@@ -99,13 +78,13 @@ export const ORGAN_TASKS: BaggoTask[] = [
     ready: () =>
       myInebriety() >= 3 &&
       myFullness() >= 3 &&
-      mallPrice($item`spice melange`) < 100 * args.bagvalue,
+      mallPrice($item`spice melange`) < 6 * profitPerOrganSpace,
     completed: () => get("spiceMelangeUsed"),
     do: () => use($item`spice melange`),
     acquire: [
       {
         item: $item`spice melange`,
-        price: 100 * args.bagvalue,
+        price: 6 * profitPerOrganSpace,
       },
     ],
   },
@@ -114,49 +93,49 @@ export const ORGAN_TASKS: BaggoTask[] = [
     ready: () =>
       myInebriety() >= 3 &&
       myFullness() >= 3 &&
-      mallPrice($item`Ultra Mega Sour Ball`) < 100 * args.bagvalue,
+      mallPrice($item`Ultra Mega Sour Ball`) < 6 * profitPerOrganSpace,
     completed: () => get("_ultraMegaSourBallUsed"),
     do: () => use($item`Ultra Mega Sour Ball`),
     acquire: [
       {
         item: $item`Ultra Mega Sour Ball`,
-        price: 100 * args.bagvalue,
+        price: 6 * profitPerOrganSpace,
       },
     ],
   },
   {
     name: "lupine appetite hormones",
-    ready: () => mallPrice($item`lupine appetite hormones`) < 50 * args.bagvalue,
+    ready: () => mallPrice($item`lupine appetite hormones`) < 3 * profitPerOrganSpace,
     completed: () => get("_lupineHormonesUsed"),
     do: () => use($item`lupine appetite hormones`),
     acquire: [
       {
         item: $item`lupine appetite hormones`,
-        price: 100 * args.bagvalue,
+        price: 3 * profitPerOrganSpace,
       },
     ],
   },
   {
     name: "Cuppa Voraci tea",
-    ready: () => mallPrice($item`cuppa Voraci tea`) < 17 * args.bagvalue,
+    ready: () => mallPrice($item`cuppa Voraci tea`) < profitPerOrganSpace,
     completed: () => get("_voraciTeaUsed"),
     do: () => use($item`cuppa Voraci tea`),
     acquire: [
       {
         item: $item`cuppa Voraci tea`,
-        price: 17 * args.bagvalue,
+        price: profitPerOrganSpace,
       },
     ],
   },
   {
     name: "Cuppa Sobrie tea",
-    ready: () => myInebriety() >= 1 && mallPrice($item`cuppa Sobrie tea`) < 16 * args.bagvalue,
+    ready: () => myInebriety() >= 1 && mallPrice($item`cuppa Sobrie tea`) < profitPerOrganSpace,
     completed: () => get("_sobrieTeaUsed"),
     do: () => use($item`cuppa Sobrie tea`),
     acquire: [
       {
         item: $item`cuppa Sobrie tea`,
-        price: 17 * args.bagvalue,
+        price: profitPerOrganSpace,
       },
     ],
   },
@@ -180,17 +159,73 @@ export const ORGAN_TASKS: BaggoTask[] = [
   },
   {
     name: "milk of magnesium",
-    ready: () => mallPrice($item`milk of magnesium`) < 5 * args.bagvalue,
+    ready: () => mallPrice($item`milk of magnesium`) < 5 * get("valueOfAdventure"),
     completed: () => get("_milkOfMagnesiumUsed"),
     do: () => use($item`milk of magnesium`),
     acquire: () => [
       {
         item: $item`milk of magnesium`,
-        price: 3000 /* shrug */,
+        price: 4000 /* shrug */,
       },
     ],
   },
-  ...decoratorTasks,
+  {
+    name: "Stomach Munchies",
+    ready: () =>
+      myInebriety() === inebrietyLimit() &&
+      stomachMunchiesValue() >= stomachWhetstoneValue() &&
+      mallPrice($item`munchies pill`) < get("valueOfAdventure") * 2,
+    completed: () => get("munchiesPillsUsed") >= 1,
+    do: () => use($item`munchies pill`),
+    acquire: () => [
+      {
+        item: $item`munchies pill`,
+        price: get("valueOfAdventure") * 2,
+      },
+    ],
+  },
+  {
+    name: "Liver Munchies",
+    ready: () =>
+      myInebriety() < inebrietyLimit() &&
+      mallPrice($item`munchies pill`) < get("valueOfAdventure") * 2,
+    completed: () => get("munchiesPillsUsed") >= 1,
+    do: () => use($item`munchies pill`),
+    acquire: () => [
+      {
+        item: $item`munchies pill`,
+        price: get("valueOfAdventure") * 2,
+      },
+    ],
+  },
+  {
+    name: "Stomach Whetstone",
+    ready: () =>
+      myInebriety() === inebrietyLimit() &&
+      stomachWhetstoneValue() > stomachMunchiesValue() &&
+      mallPrice($item`whet stone`) < get("valueOfAdventure"),
+    completed: () => get("whetstonesUsed") >= 1,
+    do: () => use($item`whet stone`),
+    acquire: () => [
+      {
+        item: $item`whet stone`,
+        price: get("valueOfAdventure"),
+      },
+    ],
+  },
+  {
+    name: "Liver Whetstone",
+    ready: () =>
+      myInebriety() < inebrietyLimit() && mallPrice($item`whet stone`) < get("valueOfAdventure"),
+    completed: () => get("whetstonesUsed") >= 1,
+    do: () => use($item`whet stone`),
+    acquire: () => [
+      {
+        item: $item`whet stone`,
+        price: get("valueOfAdventure"),
+      },
+    ],
+  },
   {
     name: "drink ghost pepper",
     ready: () => get("ghostPepperTurnsLeft") === 0 && getWorkshed() === $item`portable Mayo Clinic`,
