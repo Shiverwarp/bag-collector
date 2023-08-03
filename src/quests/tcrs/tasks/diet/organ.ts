@@ -1,5 +1,6 @@
 import {
   abort,
+  cliExecute,
   drink,
   eat,
   fullnessLimit,
@@ -156,6 +157,13 @@ export const ORGAN_TASKS: BaggoTask[] = [
     ready: () => myInebriety() >= 1 && get("sweat") >= 25,
     completed: () => get("_sweatOutSomeBoozeUsed") >= 3,
     do: () => useSkill($skill`Sweat Out Some Booze`),
+  },
+  {
+    name: "Rollercoaster day",
+    ready: () => myFullness() >= 1,
+    // eslint-disable-next-line libram/verify-constants
+    completed: () => $skill`Aug. 16th: Roller Coaster Day!`.timescast === 0,
+    do: () => cliExecute("/cast Roller Coaster Day"),
   },
   {
     name: "milk of magnesium",
