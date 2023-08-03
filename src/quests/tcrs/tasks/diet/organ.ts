@@ -162,7 +162,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     name: "Rollercoaster day",
     ready: () => myFullness() >= 1,
     // eslint-disable-next-line libram/verify-constants
-    completed: () => $skill`Aug. 16th: Roller Coaster Day!`.timescast === 0,
+    completed: () => $skill`Aug. 16th: Roller Coaster Day!`.timescast > 0,
     do: () => cliExecute("/cast Roller Coaster Day"),
   },
   {
