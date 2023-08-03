@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ActionDefaults, CombatStrategy } from "grimoire-kolmafia";
-import { $item, $skill, Macro } from "libram";
+import { isBanished } from "kolmafia";
+import { $item, $monster, $skill, Macro } from "libram";
 
 const myActions = ["kill", "banish"] as const;
 export type CombatActions = typeof myActions[number];
@@ -9,7 +10,10 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
   kill() {
     return this.delevel()
       .trySkill($skill`Sing Along`)
-      .trySkill($skill`Bowl Straight Up`)
+      .externalIf(
+        isBanished($monster`banshee librarian`) && isBanished($monster`writing desk`),
+        Macro.trySkill($skill`Bowl Straight Up`)
+      )
       .attack()
       .repeat();
   }
