@@ -226,14 +226,14 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
     outfit.modifier.push(`${rounded} Familiar Weight`);
   }
 
-  const bjornChoice = ensureBjorn(weightValue);
-  if (have($item`Buddy Bjorn`)) {
-    outfit.equip($item`Buddy Bjorn`);
-    outfit.bjornify(bjornChoice.familiar);
-  } else if (have($item`Crown of Thrones`)) {
-    outfit.equip($item`Crown of Thrones`);
-    outfit.enthrone(bjornChoice.familiar);
-  }
+  //const bjornChoice = ensureBjorn(weightValue);
+  //if (have($item`Buddy Bjorn`)) {
+  //  outfit.equip($item`Buddy Bjorn`);
+  //  outfit.bjornify(bjornChoice.familiar);
+  //} else if (have($item`Crown of Thrones`)) {
+  //  outfit.equip($item`Crown of Thrones`);
+  //  outfit.enthrone(bjornChoice.familiar);
+  //}
 
   outfit.bonuses = fullBonuses();
 
