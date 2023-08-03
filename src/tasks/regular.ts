@@ -37,7 +37,7 @@ import { BaggoCombatStrategy } from "../engine/combat";
 import { BaggoTask } from "../engine/task";
 import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
 import { meatFamiliarSpec } from "../familiar/meat-familiar";
-import { isSober } from "../lib";
+import { isSober, turnsRemaining } from "../lib";
 import { baggoOutfit } from "../outfit";
 import { EFFECTS } from "../effects";
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
@@ -153,6 +153,7 @@ export const REGULAR_TASKS: BaggoTask[] = [
   },
   {
     name: "Autumn-Aton",
+    ready: () => args.ascend || AutumnAton.turnsForQuest() < turnsRemaining(),
     completed: () => !AutumnAton.available(),
     do: (): void => {
       AutumnAton.sendTo(bestAutumnatonLocation);
