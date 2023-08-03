@@ -181,6 +181,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     name: "Stomach Munchies",
     ready: () =>
       myInebriety() === inebrietyLimit() &&
+      myFullness() < fullnessLimit() &&
       stomachMunchiesValue() >= stomachWhetstoneValue() &&
       mallPrice($item`munchies pill`) < get("valueOfAdventure") * 2,
     completed: () => get("munchiesPillsUsed") >= 1,
@@ -210,6 +211,7 @@ export const ORGAN_TASKS: BaggoTask[] = [
     name: "Stomach Whetstone",
     ready: () =>
       myInebriety() === inebrietyLimit() &&
+      myFullness() < fullnessLimit() &&
       stomachWhetstoneValue() > stomachMunchiesValue() &&
       mallPrice($item`whet stone`) < get("valueOfAdventure"),
     completed: () => get("whetstonesUsed") >= 1,
