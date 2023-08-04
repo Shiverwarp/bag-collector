@@ -26,7 +26,7 @@
     "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-libram": "^0.2.32",
+    "eslint-plugin-libram": "^0.2.33",
     "prettier": "^2.3.2",
     "typescript": "^4.4.2",
     "webpack": "^5.61.0",
@@ -34,8 +34,8 @@
   },
   "dependencies": {
     "core-js": "^3.16.4",
-    "grimoire-kolmafia": "^0.3.21",
-    "kolmafia": "^5.27498.0",
+    "grimoire-kolmafia": "^0.3.22",
+    "kolmafia": "^5.27513.0",
     "libram": "^0.8.4"
   },
   "author": "MrFizzyBubbs",

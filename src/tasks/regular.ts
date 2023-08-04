@@ -115,7 +115,9 @@ export const REGULAR_TASKS: BaggoTask[] = [
         offhand: $item`Kramco Sausage-o-Matic™`,
       };
     },
-    combat: new BaggoCombatStrategy().kill(),
+    combat: new BaggoCombatStrategy()
+      .macro(new Macro().trySkill($skill`Emit Matter Duplicating Drones`))
+      .kill(),
     limit: { completed: true },
   },
   {
