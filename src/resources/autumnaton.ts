@@ -70,7 +70,7 @@ function seasonalItemValue(location: Location, seasonalOverride?: number): numbe
           availableAmount(autumnItem) > 0
           ? avgValueOfRandomAutumnItem
           : 0
-        : getHistoricalSaleValue(autumnItem))
+        : garboValue(autumnItem))
     );
   } else {
     // If we're in a location without any uniques, we still get cowcatcher items
