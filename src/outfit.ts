@@ -226,22 +226,30 @@ export function baggoOutfit(includeFamiliar = true): Outfit {
     outfit.modifier.push(`${rounded} Familiar Weight`);
   }
 
-  //const bjornChoice = ensureBjorn(weightValue);
-  //if (have($item`Buddy Bjorn`)) {
-  //  outfit.equip($item`Buddy Bjorn`);
-  //  outfit.bjornify(bjornChoice.familiar);
-  //} else if (have($item`Crown of Thrones`)) {
-  //  outfit.equip($item`Crown of Thrones`);
-  //  outfit.enthrone(bjornChoice.familiar);
-  //}
-
   outfit.bonuses = fullBonuses();
+
+  const bjornChoice = ensureBjorn(weightValue);
+  const bjornValue =
+    bjornChoice && (bjornChoice.dropPredicate?.() ?? true)
+      ? bjornChoice.probability *
+        (typeof bjornChoice.drops === "number"
+          ? bjornChoice.drops
+          : dropsValueFunction(bjornChoice.drops))
+      : 0;
+  if (have($item`Buddy Bjorn`)) {
+    outfit.setBonus($item`Buddy Bjorn`, bjornValue);
+    outfit.bjornify(bjornChoice.familiar);
+  } else if (have($item`Crown of Thrones`)) {
+    outfit.setBonus($item`Crown of Thrones`, bjornValue);
+    outfit.enthrone(bjornChoice.familiar);
+  }
 
   const itemDropTatterEfficiency = (0.12 / 100) * mallPrice($item`tattered scrap of paper`);
   outfit.modifier.push(`${itemDropTatterEfficiency.toFixed(2)} Item Drop 834 max`);
 
   if (outfit.familiar === $familiar`Grey Goose`) {
-    outfit.modifier.push(`300 Familiar Experience 10 min 23 max -tie`);
+    outfit.modifier.push(`300 Familiar Experience 10 min 23 max`);
   }
+  outfit.modifier.push("-tie");
   return outfit;
 }
