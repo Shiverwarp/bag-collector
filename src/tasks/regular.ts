@@ -42,7 +42,7 @@ import { baggoOutfit } from "../outfit";
 import { EFFECTS } from "../effects";
 import { Outfit, OutfitSpec } from "grimoire-kolmafia";
 import { juneCleaverChoices } from "../resources/cleaver";
-import bestAutumnatonLocation from "../resources/autumnaton";
+import { bestAutumnatonLocation } from "../resources/autumnaton";
 
 export const REGULAR_TASKS: BaggoTask[] = [
   {
