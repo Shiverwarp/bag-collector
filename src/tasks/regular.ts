@@ -46,6 +46,23 @@ import { bestAutumnatonLocation } from "../resources/autumnaton";
 
 export const REGULAR_TASKS: BaggoTask[] = [
   {
+    name: "June Cleaver",
+    completed: () => !JuneCleaver.have() || !!get("_juneCleaverFightsLeft"),
+    do: () =>
+      withProperty("recoveryScript", "", () => {
+        const target =
+          myInebriety() > inebrietyLimit() ? $location`Drunken Stupor` : $location`Noob Cave`;
+        adv1(target, -1, "");
+      }),
+    post: (): void => {
+      if (["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")))
+        uneffect($effect`Beaten Up`);
+    },
+    choices: juneCleaverChoices,
+    outfit: { weapon: $item`June cleaver` },
+    combat: new BaggoCombatStrategy().macro(Macro.abort()),
+  },
+  {
     name: "Digitized Wanderer",
     completed: () => Counter.get("Digitize Monster") > 0,
     do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
